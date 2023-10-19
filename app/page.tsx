@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useChat } from "ai/react";
 // import OpenAI from "openai";
 
@@ -12,12 +12,20 @@ export default function Home() {
   const [num, setNum] = useState<number>(1);
   const [drink, setDrink] = useState<DrinkType>("cocktail(s)");
 
-  const { messages, input, handleSubmit, data } = useChat({
-    body: {
-      num,
-      drink,
-    },
-  });
+  const { messages, input, handleInputChange, handleSubmit, data, setInput } =
+    useChat({
+      body: {
+        num,
+        drink,
+      },
+    });
+
+  useEffect(() => {
+    const newInput = `Give me ${num} ${drink} recipe(s) that I can make with some or all of the ingredients: lemon, grenadine`;
+    setInput(newInput);
+  }, [num, drink]);
+
+  // const { messages, input, handleInputChange, handleSubmit, data } = useChat();
 
   // const openai = new OpenAI();
   const displayNumInput = (
@@ -38,28 +46,30 @@ export default function Home() {
     </FormControl>
   );
 
-  const onSubmit = (e: any) => {
+  const onHandleSubmit = (e: any) => {
     handleSubmit(e);
-    console.log("messages", messages);
   };
 
   return (
     <div className="">
       <main className="border border-2 bg-white">
-        <form onSubmit={onSubmit}>
-          <h1>What can I get for you?</h1>
-          <div>
-            I'd like {displayNumInput} {drink} recipes with the following
-            ingredient(s):
-          </div>
-          <button
-            // className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
-            type="submit"
-          >
-            Cheers!
-          </button>
+        <h1>What can I get for you?</h1>
+        <div>
+          I'd like {displayNumInput} {drink} recipes with the following
+          ingredient(s):
+        </div>
+        <form onSubmit={onHandleSubmit}>
+          <button type="submit">Submit</button>
         </form>
       </main>
+      {messages.length > 0
+        ? messages.map((m) => (
+            <div key={m.id} className="whitespace-pre-wrap">
+              {m.role === "user" ? "User: " : "AI: "}
+              {m.content}
+            </div>
+          ))
+        : null}
     </div>
   );
 }
