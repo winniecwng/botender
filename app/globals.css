@@ -16,11 +16,12 @@
   }
 }
 
-/* body {
+body {
   background-image: url("../public/barBG.jpg");
   background-size: cover;
+  height: 100vh;
 
   display: flex;
   justify-content: center;
   align-items: center;
-} */
+}
