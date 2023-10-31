@@ -17,11 +17,23 @@
 }
 
 body {
-  background-image: url("../public/barBG.jpg");
-  background-size: cover;
-  height: 100vh;
+  /* height: 100vh; */
+  /* background-color: black; */
+  background-color: #420404;
+  /* background-image: linear-gradient(
+    to bottom right,
+    #220101,
+    #330505,
+    #420404,
+    #510202
+  ); */
 
+  /* background-image: url("../public/barBG.jpg"); */
+  /* background-size: cover; */
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+/* .background-image {
+} */
