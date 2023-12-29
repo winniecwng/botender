@@ -1,4 +1,4 @@
-name: Issue Workflow
+name: All issues to project
 
 on:
   issues:
@@ -6,26 +6,11 @@ on:
       - opened
 
 jobs:
-  automate_issue:
+  add-to-project:
+    name: Add issue to project
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Run Automation Script
-        run: |
-          if [ -n "${{ github.event.issue.assignee }}" ]; then
-            # Update the issue to be in the 'To Do' column of the 'TeamForward' project
-            curl -X POST \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/projects/columns/f75ad846/cards \
-              -d '{"content_id": ${{ github.event.issue.id }}, "content_type": "Issue"}'
-          else
-            # Update the issue to be in the 'Product Backlog' column of the 'TeamForward' project
-            curl -X POST \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/projects/columns/47fc9ee4/cards \
-              -d '{"content_id": ${{ github.event.issue.id }}, "content_type": "Issue"}'
-          fi
+      - uses: actions/add-to-project@RELEASE_VERSION
+        with:
+          project-url: https://github.com/users/winniecwng/projects/1/
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
